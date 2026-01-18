@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Your Reward Code</title>
+    <style>
+        body {
+            background-color: #0f0f0f;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding-top: 80px;
+        }
+        .code-box {
+            margin-top: 30px;
+            padding: 20px;
+            border: 2px dashed #4caf50;
+            display: inline-block;
+            font-size: 28px;
+            letter-spacing: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Complete the ads</h1>
+    <p>Your reward code is:</p>
+
+    <div class="code-box" id="code">LOADING...</div>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const code = params.get("code");
+
+        document.getElementById("code").textContent =
+            code ? code : "NO CODE FOUND";
+    </script>
+
+</body>
+</html>
