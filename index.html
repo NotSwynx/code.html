@@ -2,40 +2,183 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Your Reward Code</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reward Code</title>
     <style>
         body {
-            background-color: #0f0f0f;
-            color: white;
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
             text-align: center;
-            padding-top: 80px;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 2.5em;
+        }
+        .success {
+            color: #27ae60;
+            font-size: 1.3em;
+            margin: 20px 0;
         }
         .code-box {
-            margin-top: 30px;
+            background: #f8f9fa;
+            border: 3px solid #27ae60;
+            border-radius: 10px;
             padding: 20px;
-            border: 2px dashed #4caf50;
-            display: inline-block;
-            font-size: 28px;
-            letter-spacing: 4px;
+            margin: 20px 0;
+            font-size: 2em;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 5px;
+            color: #2c3e50;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .no-code {
+            color: #e74c3c;
+            font-size: 1.2em;
+        }
+        .instructions {
+            background: #ecf0f1;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-size: 1.1em;
+        }
+        button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s;
+        }
+        button:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+        .copy-btn {
+            background: #27ae60;
+        }
+        .copy-btn:hover {
+            background: #229954;
+        }
+        .copied {
+            background: #f39c12;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            display: none;
         }
     </style>
 </head>
 <body>
-
-    <h1>Complete the ads</h1>
-    <p>Your reward code is:</p>
-
-    <div class="code-box" id="code">LOADING...</div>
+    <div class="container">
+        <h1>🎉 Ads Complete!</h1>
+        
+        <div id="rewardSection">
+            <div class="success">Your reward code is:</div>
+            <div id="rewardCode" class="code-box">LOADING...</div>
+        </div>
+        
+        <div id="noCodeSection" style="display: none;">
+            <div class="success no-code">NO CODE FOUND</div>
+            <p>Go back and complete the ads properly!</p>
+        </div>
+        
+        <div class="instructions">
+            <strong>Next: Copy code → Go to Discord → Type `/code YOURCODE`</strong>
+        </div>
+        
+        <div id="copiedMsg" class="copied">✅ Code copied to clipboard!</div>
+        
+        <button id="copyBtn" class="copy-btn" style="display: none;">📋 Copy Code</button>
+        <button onclick="location.reload()">🔄 Try Again</button>
+    </div>
 
     <script>
-        // Read the code from the URL fragment, e.g. .../code.html#4EB0VJQXCO
-        const hash = window.location.hash || "";
-        const code = hash.startsWith("#") ? hash.substring(1) : hash;
+        function getCodeFromURL() {
+            // Method 1: Standard query parameter ?code=ABC123
+            const urlParams = new URLSearchParams(window.location.search);
+            let code = urlParams.get('code');
+            
+            // Method 2: Handle /code/ABC123 format
+            if (!code) {
+                const path = window.location.pathname;
+                const codeMatch = path.match(/code[\/=]([A-Z0-9]{10})/i);
+                if (codeMatch) {
+                    code = codeMatch[1];
+                }
+            }
+            
+            // Method 3: Handle messy formats like code.html/?code=ABC123 or /?code=
+            if (!code) {
+                const fullUrl = window.location.href;
+                const codeMatches = fullUrl.match(/[?&\/]code[\/=]([A-Z0-9]{10})[?&\/]/i);
+                if (codeMatches) {
+                    code = codeMatches[1];
+                }
+            }
+            
+            // Clean up the code
+            if (code) {
+                code = code.replace(/[^A-Z0-9]/gi, '').substring(0, 10).toUpperCase();
+            }
+            
+            return code;
+        }
 
-        document.getElementById("code").textContent =
-            code ? code : "NO CODE FOUND";
+        function displayCode(code) {
+            const rewardCode = document.getElementById('rewardCode');
+            const rewardSection = document.getElementById('rewardSection');
+            const noCodeSection = document.getElementById('noCodeSection');
+            const copyBtn = document.getElementById('copyBtn');
+            
+            if (code && code.length === 10) {
+                rewardCode.textContent = code;
+                copyBtn.style.display = 'inline-block';
+                copyBtn.onclick = function() {
+                    navigator.clipboard.writeText(code).then(() => {
+                        const copiedMsg = document.getElementById('copiedMsg');
+                        copiedMsg.style.display = 'block';
+                        setTimeout(() => {
+                            copiedMsg.style.display = 'none';
+                        }, 2000);
+                    });
+                };
+            } else {
+                rewardSection.style.display = 'none';
+                noCodeSection.style.display = 'block';
+            }
+        }
+
+        // Run on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            const code = getCodeFromURL();
+            displayCode(code);
+        });
+
+        // Also check immediately in case of direct navigation
+        displayCode(getCodeFromURL());
     </script>
-
 </body>
 </html>
