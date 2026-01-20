@@ -41,26 +41,25 @@
         }
 
         .code {
-            font-size: clamp(2.5rem, 12vw, 5rem);
+            font-size: clamp(3rem, 14vw, 6rem);
             font-weight: 600;
             font-family: 'SF Mono', Monaco, 'Roboto Mono', monospace;
-            letter-spacing: 0.1em;
-            background: rgba(255,255,255,0.05);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 12px;
-            padding: 1.5rem 2rem;
+            letter-spacing: 0.05em;
+            color: #fff;
+            padding: 1rem 0;
             margin: 1rem 0;
-            min-height: 80px;
+            min-height: 90px;
             display: flex;
             align-items: center;
             justify-content: center;
+            text-shadow: 0 0 20px rgba(255,255,255,0.3);
             transition: all 0.3s ease;
+            white-space: nowrap;
         }
 
         .code:hover {
-            border-color: rgba(255,255,255,0.2);
-            box-shadow: 0 20px 40px rgba(255,255,255,0.05);
+            text-shadow: 0 0 40px rgba(255,255,255,0.5);
+            transform: scale(1.02);
         }
 
         .no-code {
@@ -110,8 +109,9 @@
             }
             
             .code {
-                font-size: 2.5rem;
-                padding: 1rem;
+                font-size: 2.8rem;
+                letter-spacing: 0.1em;
+                padding: 0.5rem 0;
             }
         }
     </style>
@@ -136,21 +136,17 @@
 
     <script>
         function extractCode() {
-            // Handle every possible URL format
             let code = null;
             const href = window.location.href;
             
-            // Method 1: ?code=ABC123
             const urlParams = new URLSearchParams(window.location.search);
             code = urlParams.get('code');
             
-            // Method 2: /code/ABC123
             if (!code) {
                 const codeMatch = href.match(/code[\/=]([A-Z0-9]{8,12})/i);
                 if (codeMatch) code = codeMatch[1];
             }
             
-            // Method 3: Any code-like string after code.html
             if (!code) {
                 const afterHtml = href.split('code.html')[1];
                 if (afterHtml) {
@@ -159,7 +155,6 @@
                 }
             }
             
-            // Clean and validate
             if (code) {
                 code = code.replace(/[^A-Z0-9]/g, '').substring(0, 10).toUpperCase();
             }
@@ -194,7 +189,6 @@
             }
         }
 
-        // Initialize immediately and on load
         init();
         window.addEventListener('load', init);
     </script>
