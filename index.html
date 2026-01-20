@@ -3,182 +3,200 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reward Code</title>
+    <title>Reward</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: 'Arial', sans-serif;
-            max-width: 600px;
-            margin: 50px auto;
-            padding: 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #000;
+            color: #fff;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-        }
-        .container {
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            text-align: center;
-        }
-        h1 {
-            color: #333;
-            margin-bottom: 20px;
-            font-size: 2.5em;
-        }
-        .success {
-            color: #27ae60;
-            font-size: 1.3em;
-            margin: 20px 0;
-        }
-        .code-box {
-            background: #f8f9fa;
-            border: 3px solid #27ae60;
-            border-radius: 10px;
             padding: 20px;
-            margin: 20px 0;
-            font-size: 2em;
-            font-weight: bold;
-            font-family: 'Courier New', monospace;
-            letter-spacing: 5px;
-            color: #2c3e50;
-            min-height: 60px;
+            line-height: 1.4;
+        }
+
+        .container {
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        h1 {
+            font-size: clamp(2rem, 8vw, 3.5rem);
+            font-weight: 300;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+
+        .code-section {
+            margin: 2rem 0;
+        }
+
+        .code {
+            font-size: clamp(2.5rem, 12vw, 5rem);
+            font-weight: 600;
+            font-family: 'SF Mono', Monaco, 'Roboto Mono', monospace;
+            letter-spacing: 0.1em;
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 1.5rem 2rem;
+            margin: 1rem 0;
+            min-height: 80px;
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: all 0.3s ease;
         }
+
+        .code:hover {
+            border-color: rgba(255,255,255,0.2);
+            box-shadow: 0 20px 40px rgba(255,255,255,0.05);
+        }
+
         .no-code {
-            color: #e74c3c;
-            font-size: 1.2em;
+            color: #666;
+            font-size: 1.2rem;
+            font-weight: 300;
         }
-        .instructions {
-            background: #ecf0f1;
-            padding: 15px;
-            border-radius: 10px;
-            margin: 20px 0;
-            font-size: 1.1em;
-        }
-        button {
-            background: #3498db;
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 25px;
-            font-size: 1.1em;
-            cursor: pointer;
-            margin: 10px;
-            transition: all 0.3s;
-        }
-        button:hover {
-            background: #2980b9;
-            transform: translateY(-2px);
-        }
+
         .copy-btn {
-            background: #27ae60;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #fff;
+            padding: 0.75rem 2rem;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 0.5rem;
         }
+
         .copy-btn:hover {
-            background: #229954;
+            background: rgba(255,255,255,0.2);
+            border-color: rgba(255,255,255,0.4);
+            transform: translateY(-1px);
         }
-        .copied {
-            background: #f39c12;
-            color: white;
-            padding: 10px;
-            border-radius: 5px;
-            margin-top: 10px;
+
+        .instructions {
+            font-size: 1.1rem;
+            font-weight: 300;
+            opacity: 0.8;
+            margin-top: 2rem;
+            line-height: 1.6;
+        }
+
+        .error {
             display: none;
+            color: #ff6b6b;
+            font-size: 1rem;
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            
+            .code {
+                font-size: 2.5rem;
+                padding: 1rem;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🎉 Ads Complete!</h1>
+        <h1>Complete</h1>
         
-        <div id="rewardSection">
-            <div class="success">Your reward code is:</div>
-            <div id="rewardCode" class="code-box">LOADING...</div>
+        <div class="code-section">
+            <div id="codeDisplay" class="code">Loading...</div>
+            <button id="copyBtn" class="copy-btn" style="display: none;">Copy Code</button>
         </div>
         
-        <div id="noCodeSection" style="display: none;">
-            <div class="success no-code">NO CODE FOUND</div>
-            <p>Go back and complete the ads properly!</p>
+        <div id="errorMsg" class="error">
+            No code found. Complete the ads properly.
         </div>
         
         <div class="instructions">
-            <strong>Next: Copy code → Go to Discord → Type `/code YOURCODE`</strong>
+            Copy code → Discord → <code>/code YOURCODE</code>
         </div>
-        
-        <div id="copiedMsg" class="copied">✅ Code copied to clipboard!</div>
-        
-        <button id="copyBtn" class="copy-btn" style="display: none;">📋 Copy Code</button>
-        <button onclick="location.reload()">🔄 Try Again</button>
     </div>
 
     <script>
-        function getCodeFromURL() {
-            // Method 1: Standard query parameter ?code=ABC123
+        function extractCode() {
+            // Handle every possible URL format
+            let code = null;
+            const href = window.location.href;
+            
+            // Method 1: ?code=ABC123
             const urlParams = new URLSearchParams(window.location.search);
-            let code = urlParams.get('code');
+            code = urlParams.get('code');
             
-            // Method 2: Handle /code/ABC123 format
+            // Method 2: /code/ABC123
             if (!code) {
-                const path = window.location.pathname;
-                const codeMatch = path.match(/code[\/=]([A-Z0-9]{10})/i);
-                if (codeMatch) {
-                    code = codeMatch[1];
+                const codeMatch = href.match(/code[\/=]([A-Z0-9]{8,12})/i);
+                if (codeMatch) code = codeMatch[1];
+            }
+            
+            // Method 3: Any code-like string after code.html
+            if (!code) {
+                const afterHtml = href.split('code.html')[1];
+                if (afterHtml) {
+                    const match = afterHtml.match(/[A-Z0-9]{8,12}/i);
+                    if (match) code = match[0];
                 }
             }
             
-            // Method 3: Handle messy formats like code.html/?code=ABC123 or /?code=
-            if (!code) {
-                const fullUrl = window.location.href;
-                const codeMatches = fullUrl.match(/[?&\/]code[\/=]([A-Z0-9]{10})[?&\/]/i);
-                if (codeMatches) {
-                    code = codeMatches[1];
-                }
-            }
-            
-            // Clean up the code
+            // Clean and validate
             if (code) {
-                code = code.replace(/[^A-Z0-9]/gi, '').substring(0, 10).toUpperCase();
+                code = code.replace(/[^A-Z0-9]/g, '').substring(0, 10).toUpperCase();
             }
             
-            return code;
+            return code && code.length >= 8 ? code : null;
         }
 
-        function displayCode(code) {
-            const rewardCode = document.getElementById('rewardCode');
-            const rewardSection = document.getElementById('rewardSection');
-            const noCodeSection = document.getElementById('noCodeSection');
+        function init() {
+            const code = extractCode();
+            const codeDisplay = document.getElementById('codeDisplay');
             const copyBtn = document.getElementById('copyBtn');
+            const errorMsg = document.getElementById('errorMsg');
             
-            if (code && code.length === 10) {
-                rewardCode.textContent = code;
+            if (code) {
+                codeDisplay.textContent = code;
                 copyBtn.style.display = 'inline-block';
-                copyBtn.onclick = function() {
+                
+                copyBtn.onclick = () => {
                     navigator.clipboard.writeText(code).then(() => {
-                        const copiedMsg = document.getElementById('copiedMsg');
-                        copiedMsg.style.display = 'block';
+                        copyBtn.textContent = 'Copied!';
+                        copyBtn.style.background = 'rgba(59, 130, 246, 0.3)';
                         setTimeout(() => {
-                            copiedMsg.style.display = 'none';
-                        }, 2000);
+                            copyBtn.textContent = 'Copy Code';
+                            copyBtn.style.background = '';
+                        }, 1500);
                     });
                 };
             } else {
-                rewardSection.style.display = 'none';
-                noCodeSection.style.display = 'block';
+                codeDisplay.style.display = 'none';
+                copyBtn.style.display = 'none';
+                errorMsg.style.display = 'block';
             }
         }
 
-        // Run on page load
-        window.addEventListener('DOMContentLoaded', function() {
-            const code = getCodeFromURL();
-            displayCode(code);
-        });
-
-        // Also check immediately in case of direct navigation
-        displayCode(getCodeFromURL());
+        // Initialize immediately and on load
+        init();
+        window.addEventListener('load', init);
     </script>
 </body>
 </html>
