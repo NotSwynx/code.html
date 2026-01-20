@@ -29,14 +29,13 @@
     <div class="code-box" id="code">LOADING...</div>
 
     <script>
-    // Get the part after '#'
-    const hash = window.location.hash || "";
-    const code = hash.startsWith("#") ? hash.substring(1) : hash;
+        // Read the code from the URL fragment, e.g. .../code.html#4EB0VJQXCO
+        const hash = window.location.hash || "";
+        const code = hash.startsWith("#") ? hash.substring(1) : hash;
 
-    document.getElementById("code").textContent =
-        code ? code : "NO CODE FOUND";
-</script>
-
+        document.getElementById("code").textContent =
+            code ? code : "NO CODE FOUND";
+    </script>
 
 </body>
 </html>
